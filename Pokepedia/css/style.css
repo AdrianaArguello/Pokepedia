@@ -165,7 +165,7 @@ section::before{
 	background: linear-gradient(to top, #1c0522,transparent);
 	z-index: 1000;
 }
-.card{
+.card, .MovePage{
 	cursor: pointer;
 }
 
