@@ -13,6 +13,7 @@
    * @returns Pokemon Card template html
    */
   const LoadGridPokemons = ()=>{
+
     const PokemonsCards = Pokemons.results.map(pokemon => {
       const template = `
       <div data-id="${pokemon.id}" class="col animado pokemonCol">
@@ -28,6 +29,7 @@
       </div>`;
       return template;
     });
+
     return PokemonsCards;
   }
 
@@ -96,12 +98,16 @@
 
     const PokemonContainer        = document.querySelector('.PokemonsGrid');
     const paginationContainer     = document.querySelector('.navigation');
+    const Datalist                = document.querySelector('#DataListPokemon');
 
     const PokemonsCards           = LoadGridPokemons();
     const PokemonsPagination      = LoadPagination();
 
     PokemonContainer.innerHTML    = PokemonsCards.slice(start,end).join(" ");
     paginationContainer.innerHTML = PokemonsPagination;
+
+    Datalist.innerHTML = Pokemons.results.map( pokemon => `<option data-id="${pokemon.id}" value="${pokemon.name}"></option>`)
+                          .join(" ");
 
     LoadEvents();
   }
