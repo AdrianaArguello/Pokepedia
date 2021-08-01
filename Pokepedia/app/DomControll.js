@@ -4,7 +4,7 @@
 
 (function(Grid){
   
-  Grid.Offline(); 
+  //Grid.Offline(); 
   const Pokemons = Grid;
   const CardsPerPages = 6;
 
