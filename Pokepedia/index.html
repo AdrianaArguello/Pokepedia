@@ -34,13 +34,25 @@
 	</section>
 
 	<div id="sec" class="sec" style="display:flex; flex-direction:column;">
+
+		<datalist id="DataListPokemon"></datalist>
+
 		<h2 class="animado">Catalogo de pokemones</h2>
+
+		<div class="form-floating mb-3 mt-3">
+			<input type="text" class="form-control" list="DataListPokemon" id="searchPokemon" placeholder="Filtrar por nombre">
+			<label for="searchPokemon">¿Cómo se llama el pokemón?</label>
+		</div>
+		
 		<div id="PokemonsGrid" class="row row-cols-1 row-cols-md-3 g-4 mb-5 PokemonsGrid"></div>
 
 
 		<nav class="navigation" aria-label="Page navigation"></nav>
 
 	</div>
+
+
+	
 
 	<footer class="footer">
 			<!-- <img src="city_life.svg" class="fondo-footer" alt=""> -->
