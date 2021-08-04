@@ -16,7 +16,7 @@
         <div class="flip-box-front h-100">
           <img src="${png}" class="card-img-top" alt="${name}">
           <div class="card-body">
-            <img class="pokeball" src="/home/klissman/Documentos/Pokepedia/Pokepedia/img/svgs/pokeball.svg" alt="pokeball">
+            <img class="pokeball" src="./img/svgs/pokeball.svg" alt="pokeball">
             <h5 class="card-title text-capitalize">
               <strong>${name}</strong>
             </h5>
