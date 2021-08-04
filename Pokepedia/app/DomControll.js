@@ -8,19 +8,33 @@
   const CardsPerPages = 6;
 
   const PokemonCard = function(pokemon){
-    const {id,name,png} = pokemon;
+    const {id,name,png,weight,height,types} = pokemon;
     const template = `
-      <div data-id="${id}" class="col animado pokemonCol">
-        <div class="card text-center border-4">
+    <div data-id="${id}" class="col-md-4 pokemonCol">
+      <div class="card text-center border-4 h-100">
+        
+        <div class="flip-box-front h-100">
           <img src="${png}" class="card-img-top" alt="${name}">
           <div class="card-body">
-            <img class="pokeball" src="./img/svgs/pokeball.svg" alt="pokeball">
+            <img class="pokeball" src="/home/klissman/Documentos/Pokepedia/Pokepedia/img/svgs/pokeball.svg" alt="pokeball">
             <h5 class="card-title text-capitalize">
               <strong>${name}</strong>
             </h5>
           </div>
         </div>
-      </div>`;
+
+        <div class="flip-box-back h-100 d-none">
+          <img src="${png}" class="card-img-top" alt="${name}">
+          <div class="card-body">
+            <strong>Tipo</strong>: ${types.join(", ")}.<br>
+            <strong>Peso</strong>: ${weight}.<br>
+            <strong>Altura</strong>: ${height}.<br>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    `;
     return template;
   };
 
@@ -71,7 +85,7 @@
   /**
    * load DOM events
    */
-  const LoadEvents = ()=>{
+  let LoadEvents = ()=>{
     
     const BtnPagination   = document.querySelectorAll('.MovePage');
     const BtnNextPage     = document.querySelector('#NextPage');
@@ -86,6 +100,7 @@
         const End    = this.dataset.end;
         BtnActivePage = (this);
         LoadPokemonsGridDOM(Start,End);
+        OverideEvents.FlixCard();
       }
     });
     /**
@@ -169,7 +184,31 @@
       const pokemon              = Pokemons.findByName(PokemonName);
       const PokemonContainer     = document.querySelector('.PokemonsGrid');
       PokemonContainer.innerHTML = pokemon == null? '': PokemonCard(pokemon);
-    })
+      OverideEvents.FlixCard();
+    });
+
+    const OverideEvents = {
+      FlixCard : function(){
+        const PokemonCardFront        = document.querySelectorAll('.flip-box-front');
+        const PokemonCardBack         = document.querySelectorAll('.flip-box-back');
+        
+        PokemonCardFront.forEach( (pokemonCardFront,index) =>{
+          pokemonCardFront.onmouseover = function(){
+            this.classList.add('d-none')
+            PokemonCardBack[index].classList.remove('d-none');
+          }
+          PokemonCardBack[index].onmouseleave = function(){
+            this.classList.add('d-none');
+            pokemonCardFront.classList.remove('d-none');
+          }
+        })
+      },
+      main : function(){
+        this.FlixCard();
+      }
+    }
+
+    return OverideEvents;
 
   }
 
@@ -200,6 +239,7 @@
   }
   LoadPokemonsGridDOM(0,CardsPerPages);
   LoadDOM();
-  LoadEvents();
+  LoadEvents = LoadEvents();
+  LoadEvents.main();
 
 })(Grid);
