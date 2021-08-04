@@ -1,35 +1,37 @@
 /**
- * @param Grid : Response, example Grid in /test/FetchingData.js
+ * @param Grid : Response, example Grid in app/data.js
  */
 
 (function(Grid){
   
-  //Grid.Offline(); 
   const Pokemons = Grid;
   const CardsPerPages = 6;
 
-  /**
-   * 
-   * @returns Pokemon Card template html
-   */
-  const LoadGridPokemons = ()=>{
-
-    const PokemonsCards = Pokemons.results.map(pokemon => {
-      const template = `
-      <div data-id="${pokemon.id}" class="col animado pokemonCol">
+  const PokemonCard = function(pokemon){
+    const {id,name,png} = pokemon;
+    const template = `
+      <div data-id="${id}" class="col animado pokemonCol">
         <div class="card text-center border-4">
-          <img src="${pokemon.png}" class="card-img-top" alt="${pokemon.name}">
+          <img src="${png}" class="card-img-top" alt="${name}">
           <div class="card-body">
             <img class="pokeball" src="./img/svgs/pokeball.svg" alt="pokeball">
             <h5 class="card-title text-capitalize">
-              <strong>${pokemon.name}</strong>
+              <strong>${name}</strong>
             </h5>
           </div>
         </div>
       </div>`;
-      return template;
-    });
+    return template;
+  };
 
+  /**
+   * 
+   * @returns Pokemon grid template html
+   */
+  const LoadGridPokemons = ()=>{
+
+    const PokemonsCards = Pokemons.results
+           .map(pokemon => PokemonCard(pokemon));
     return PokemonsCards;
   }
 
@@ -39,24 +41,24 @@
    */
   const LoadPagination = ()=>{
 
-    const PokemonsCount = Pokemons.results.length;
+    const PokemonsCount = Pokemons.count;
 
     let template = `<ul id="PokemonsPagination" class="pagination pagination-sm justify-content-center">`;
         template += `<li id="PrePage" class="page-item">
-                      <a class="page-link" href="#PokemonsPagination" aria-label="Previous">
+                      <a class="page-link" href="#pagination" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                       </a>
                     </li>`;
 
-      for(let i = 1; i<=(PokemonsCount/CardsPerPages);i++)
+      for(let i = 1; i<=(PokemonsCount/CardsPerPages) + 1;i++)
         template += `<li class="page-item MovePage ${i<11?'showPage':'d-none'}"
                           data-init="${(i*CardsPerPages) - CardsPerPages}" data-end="${i*CardsPerPages}">
-                          <a class="page-link" href="#PokemonsGrid">${i}</a>
+                          <a class="page-link" href="#pagination">${i}</a>
                       </li>`;
         template += `
                     <li class="page-item" id="NextPage">
-                      <a class="page-link" href="#NextPage" aria-label="Next">
+                      <a class="page-link" href="#pagination" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                       </a>
@@ -71,48 +73,133 @@
    */
   const LoadEvents = ()=>{
     
-    const BtnPagination = document.querySelectorAll('.MovePage');
-    const BtnNextPage   = document.querySelector('#NextPage');
-    
+    const BtnPagination   = document.querySelectorAll('.MovePage');
+    const BtnNextPage     = document.querySelector('#NextPage');
+    const BtnBackPage     = document.querySelector('#PrePage');
+    const InputFindByName = document.querySelector('#searchPokemon');
+    const FormFindByName  = document.querySelector('.FormFindByName');
+    let BtnActivePage     = BtnPagination[0];
+
     BtnPagination.forEach((value)=>{
       value.onclick = function(){
         const Start  = this.dataset.init;
         const End    = this.dataset.end;
-        LoadDom(Start,End);
+        BtnActivePage = (this);
+        LoadPokemonsGridDOM(Start,End);
+      }
+    });
+    /**
+     * 
+     * @param {*} procedure : callback( pointer , btnVisibles ) => boolean 
+     * @returns 
+     */
+    const MovePointer = function(procedure){
+      let btnPagination = [...BtnPagination];
+      const pointer     = {start:0,end:0};
+
+      btnPagination = btnPagination
+        .filter( (btnPage) => btnPage
+                      .classList.contains('showPage'));
+      
+      if( procedure(pointer,btnPagination) ){
+        return;
+      }
+
+      btnPagination.forEach( btnPage => {
+        btnPage.classList.remove('showPage');
+        btnPage.classList.add('d-none');
+      });
+
+      btnPagination = [...BtnPagination].slice(pointer.start,pointer.end);
+      btnPagination[0].onclick();
+
+      btnPagination.forEach( (BtnPage) => {
+          BtnPage.classList.remove('d-none');
+          BtnPage.classList.add('showPage');
+        });
+    }
+
+    BtnNextPage.addEventListener('click', function(){
+      MovePointer(
+        /**
+         * 
+         * @param {*} pointer 
+         * @param {*} btnPagination 
+         * @returns boolean
+         */
+        function(pointer,btnPagination){
+          pointer.start = [... BtnPagination]
+                            .indexOf(
+                              btnPagination[btnPagination.length -1 ]
+                            ) + 1;
+          pointer.end   = pointer.start + 10;
+          return pointer.start == Math.round(Pokemons.count/ 6+1)-1;
+        }
+      );
+    });
+
+    BtnBackPage.addEventListener('click',function(){
+      MovePointer(
+        /**
+         * 
+         * @param {*} pointer 
+         * @param {*} btnPagination 
+         * @returns 
+         */
+        function(pointer,btnPagination){
+          pointer.end = ( [... BtnPagination]
+                          .indexOf(
+                            btnPagination[btnPagination.length -1 ]
+                          ) + 1 ) - 10;
+          pointer.start   = pointer.end - 10;
+          return pointer.start == -10
+        }
+      );
+    });
+
+    InputFindByName.addEventListener('input',function(e){
+      if(!e.target.value){
+        BtnActivePage.onclick();
       }
     });
 
-    BtnNextPage.onclick = function(){
-      
-    }
+    FormFindByName.addEventListener('submit',function(e){
+      e.preventDefault();
+      const PokemonName          = InputFindByName.value.toLowerCase();
+      const pokemon              = Pokemons.findByName(PokemonName);
+      const PokemonContainer     = document.querySelector('.PokemonsGrid');
+      PokemonContainer.innerHTML = pokemon == null? '': PokemonCard(pokemon);
+    })
 
   }
 
   /**
-   * Loads the entire grid according to an interval
+   * Loads the entire Pokemon's grid according to an interval
    * @param {*} start 
    * @param {*} end 
    */
-
-  const LoadDom = (start,end)=>{
-
+  const LoadPokemonsGridDOM = (start,end)=>{
     const PokemonContainer        = document.querySelector('.PokemonsGrid');
+    const PokemonsCards           = LoadGridPokemons();
+    PokemonContainer.innerHTML    = PokemonsCards.slice(start,end).join(" ");
+  }
+  /**
+   * Load DOM only once
+   */
+  const LoadDOM = ()=>{
     const paginationContainer     = document.querySelector('.navigation');
     const Datalist                = document.querySelector('#DataListPokemon');
-
-    const PokemonsCards           = LoadGridPokemons();
     const PokemonsPagination      = LoadPagination();
-
-    PokemonContainer.innerHTML    = PokemonsCards.slice(start,end).join(" ");
     paginationContainer.innerHTML = PokemonsPagination;
-
-    Datalist.innerHTML = Pokemons.results.map( pokemon => `<option data-id="${pokemon.id}" value="${pokemon.name}"></option>`)
-                          .join(" ");
-
-    LoadEvents();
+    Datalist.innerHTML = Pokemons.results
+      .map( 
+        pokemon => 
+        `<option data-id="${pokemon.id}" value="${pokemon.name}"></option>`
+      )
+    .join(" ");
   }
-
-
-  LoadDom(0,CardsPerPages);
+  LoadPokemonsGridDOM(0,CardsPerPages);
+  LoadDOM();
+  LoadEvents();
 
 })(Grid);

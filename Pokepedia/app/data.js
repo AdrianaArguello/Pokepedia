@@ -1,8 +1,49 @@
 const Grid = {
-  "count": 1118,
-  "next": "https://pokeapi.co/api/v2/pokemon/?offset=899&limit=219",
-  "previous": null,
-  "results": [
+  "count":"898",
+  "types":{
+    "en":[
+      "bug",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water",
+      "dark"
+    ],
+    "en_es":{
+      "bug":"bicho",
+      "dragon":"dragón",
+      "electric":"eléctrico",
+      "fairy":"hada",
+      "fighting":"lucha",
+      "fire":"fuego",
+      "flying":"volador",
+      "ghost":"fantasma",
+      "grass":"planta",
+      "ground":"tierra",
+      "ice":"hielo",
+      "normal":"normal",
+      "poison":"veneno",
+      "psychic":"psíquico",
+      "rock":"roca",
+      "steel":"acero",
+      "water":"agua",
+      "dark":"siniestro"
+    }
+  },
+  "results":
+  [ 
     {
       "id": 1,
       "name": "bulbasaur",
@@ -11221,72 +11262,5 @@ const Grid = {
       "weight": "7.7 kg",
       "height": "1.1 m"
     }
-  ],
-  Offline:function (check = true){
-    const uri = check? './img/sprites/':'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/';
-    const svg = uri + 'dream-world/{id}.svg';
-    const png = uri + 'official-artwork/{id}.png';
-    
-    this.results.forEach(result => {
-      result.png = png.replace('{id}',result.id);
-      result.svg = svg.replace('{id}',result.id);
-    });
-
-    console.log( check? 'now is offline' : 'now is online' );
-  }
+  ]
 }
-/**
- * @param Grid : models data
- * @returns {DownloadResources} : utils for generate resources
- */
-const FetchTest = (
-
-  function(Grid){
-    /**
-     * 
-     * @param {*} filename : name
-     * @param {*} text     : Content 
-     * @returns void
-     */
-    function download(filename, text) {
-      const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-      element.setAttribute('download', filename + '.txt');
-
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
-    /**
-     * Download resources into txt files for download with wget
-     * @return void
-     */
-    function DownloadResources(){
-      const pngs =  (Grid.results.map( png => png.png )).join("\n");
-      const svgs =  (Grid.results.map( svg => svg.svg )).join("\n");
-
-      download('pngs',pngs);
-      download('svgs',svgs);
-      
-    }
-    return {DownloadResources}
-  }
-
-)(Grid);
-
-//Función para buscar un pokemon por su nombre, recibe el nombre a buscar y el array de lista de pokemones
-
-const findByName = (name,arr) => {
-
-  const value = arr.find(e => e.name === name)
-
-  return value? value:{}
-} 
-
-//Lista de tipos de pokemones (por si es necesario como guía)
-
-const listaTipos = ["Bicho","Dragón","Eléctrico","Hada",
-"Lucha","Fuego","Volador","Fantasma","Planta","Tierra",
-"Hielo","Normal","Veneno","Psíquico","Roca","Acero",
-"Agua","Siniestro"]

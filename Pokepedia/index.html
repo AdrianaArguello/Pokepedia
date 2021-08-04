@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<title>Tecnologias Web</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" 
+		integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" 
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+	
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/pikachu.css">
-	<!-- Bootstrap CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-	<script src="js/scrollreveal.js"></script>
-	<script src="js/anime.min.js" type="text/javascript"></script>
 
 </head>
+
 <body>
-	
+
 	<header>
 		<a href="#" class="logo">Team <span class="logo-span">SAK</span></a>
 		<ul>
@@ -24,7 +26,7 @@
 			<li><a class="nav-item" href="html/tecnologias.html">Tecnologias</a></li>
 		</ul>
 	</header>
-	
+
 	<section style="height:100vh">
 		<img src="img/stars.png" id="stars">
 		<img src="img/moon.png" id="moon">
@@ -35,125 +37,60 @@
 	</section>
 
 	<div id="sec" class="sec" style="display:flex; flex-direction:column;">
-
-		<datalist id="DataListPokemon"></datalist>
-
 		<h2 class="animado">Catalogo de pokemones</h2>
-
-		<div class="form-floating mb-3 mt-3">
-			<input type="text" class="form-control" list="DataListPokemon" id="searchPokemon" placeholder="Filtrar por nombre">
+		<!--Pokemon's input search -->
+		<form class="form-floating mb-3 mt-3 FormFindByName">
+			<input required type="text" class="form-control" list="DataListPokemon" id="searchPokemon"
+				placeholder="Filtrar por nombre">
 			<label for="searchPokemon">¿Cómo se llama el pokemón?</label>
-		</div>
-		
+		</form>
+		<!-- Pokemon's Datalist -->
+		<datalist id="DataListPokemon"></datalist>
+		<!-- Pokemon's Grid container -->
 		<div id="PokemonsGrid" class="row row-cols-1 row-cols-md-3 g-4 mb-5 PokemonsGrid"></div>
-
-
-		<nav class="navigation" aria-label="Page navigation"></nav>
-
+		<!-- Pokemon's pagination -->
+		<nav id="pagination" class="navigation" aria-label="Page navigation"></nav>
 	</div>
 
-
-	
-
 	<footer class="footer">
-			<!-- <img src="city_life.svg" class="fondo-footer" alt=""> -->
-			<div class="box"></div>
-			<div class="container-footer">
-				<div class="row-footer">
-					<div class="footer-col">
-						<div class="footer-logo">
-							<img src="img/computer.svg" class="footer-logo-svg" alt="">
-							<h4 style="font-size: 24px; margin-left: .5em;">Team <span style="color:#f9e25c;">SAK</span></h4>
-						</div>
+		<div class="box"></div>
+		<div class="container-footer">
+			<div class="row-footer">
+				<div class="footer-col">
+					<div class="footer-logo">
+						<img src="img/computer.svg" class="footer-logo-svg" alt="">
+						<h4 style="font-size: 24px; margin-left: .5em;">Team <span style="color:#f9e25c;">SAK</span></h4>
 					</div>
-					<div class="footer-col" style="margin-left: 10em;">
-						<h4>Menu de opciones</h4>
-						<ul>
-							<li><a href="#">Equipo</a></li>
-							<li><a href="#">Objetivo</a></li>
-							<li><a href="#">Tecnologias</a></li>
-							<br>
-						</ul>
-					</div>
-					<div class="footer-col">
-						<h4>Siguenos</h4>
-						<div class="social-links" style="position: absolute;">
-							<a href="#"><i class="fab fa-facebook-f"></i></a>
-							<a href="#"><i class="fab fa-twitter"></i></a>
-							<a href="#"><i class="fab fa-instagram"></i></a>
-							<a href="#"><i class="fab fa-linkedin-in"></i></a>
-						</div>
+				</div>
+				<div class="footer-col" style="margin-left: 10em;">
+					<h4>Menu de opciones</h4>
+					<ul>
+						<li><a href="#">Equipo</a></li>
+						<li><a href="#">Objetivo</a></li>
+						<li><a href="#">Tecnologias</a></li>
+						<br>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Siguenos</h4>
+					<div class="social-links" style="position: absolute;">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
 					</div>
 				</div>
 			</div>
+		</div>
 	</footer>
-	<script>
-			var animation = anime.timeline({
-				autoplay: false,
-			});
 
-			animation
-			.add({
-				targets:'#btn',
-				top:'1500px',
-				duration:500,
-				easing: 'easeInOutSine'
-			})
+	<script src="js/scrollreveal.js"></script>
+	<script src="js/anime.min.js" type="text/javascript"></script>
+	<script src="./js/animations.js"></script>
 
-			.add({
-				targets:'#stars',
-				top:'0px',
-				duration:1000,
-				easing: 'easeInOutSine'
-			})
-
-			.add({
-				targets:'#mountains_behind',
-				bottom:'0px',
-				duration:1000,
-				easing: 'easeInOutSine'
-			})
-
-			.add({
-				targets:'#moon',
-				top:'0px',
-				duration:1000,
-				easing: 'easeInOutBack'
-			})
-
-			.add({
-				targets:'#mountains_front',
-				bottom:'0px',
-				duration:1000,
-				easing: 'easeInOutSine'
-			})
-
-			.add({
-				targets:'#text',
-				marginRight:0,
-				duration:1000,
-				easing: 'easeInOutBack'
-			})
-
-			.add({
-				targets:'#btn',
-				top:'50%',
-				duration:1000,
-				easing: 'easeInOutBack'
-			})
-			document.querySelector('#btn').onclick = animation.play;
-
-			window.sr = ScrollReveal();
-			sr.reveal('.animado', {
-				duration: 3000,
-				origin: 'bottom',
-				distance: '-100px'
-			});
-	</script>
-		
-	<!-- test -->
-	<script src="./test/FetchingData.js"></script>
-	<!---->
+	<script src="./app/data.js"></script>
+	<script src="./app/fetching.js"></script>
 	<script src="./app/DomControll.js"></script>
 </body>
+
 </html>
