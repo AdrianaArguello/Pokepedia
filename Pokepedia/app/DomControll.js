@@ -66,9 +66,9 @@
                     </li>`;
 
       for(let i = 1; i<=(PokemonsCount/CardsPerPages) + 1;i++)
-        template += `<li class="page-item MovePage ${i<11?'showPage':'d-none'}"
+        template += `<li class="page-item MovePage ${i<11?'showPage':'d-none'} ${i==1? 'active': ''}"
                           data-init="${(i*CardsPerPages) - CardsPerPages}" data-end="${i*CardsPerPages}">
-                          <a class="page-link" href="#pagination">${i}</a>
+                          <a class="page-link" href="#pagination">${i} </a>
                       </li>`;
         template += `
                     <li class="page-item" id="NextPage">
@@ -98,9 +98,11 @@
       value.onclick = function(){
         const Start  = this.dataset.init;
         const End    = this.dataset.end;
+        BtnActivePage.classList.remove('active')
         BtnActivePage = (this);
         LoadPokemonsGridDOM(Start,End);
         OverideEvents.FlixCard();
+        BtnActivePage.classList.add('active')
       }
     });
     /**
