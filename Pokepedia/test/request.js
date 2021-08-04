@@ -1,7 +1,7 @@
 /** 
  * Main mehtod
  */
-( function(){
+const requests = ( function(){
   
   /**
    * Routes for resources
@@ -33,33 +33,7 @@
     return response;
 
   }
-  /**
-   * Loading DOM with pokemons list
-   */
-  const LoadDom = async()=>{
 
-    const PokemonContainer = document.querySelector('.PokemonsGrid');
-    const Pokemons = await all();
-    
-    Pokemons.results.forEach(pokemon => {
-      const template = `
-        <div data-id="${pokemon.id}" class="col animado">
-          <div class="card text-center border-4">
-            <img src="${pokemon.png}" loading="lazy" class="card-img-top" alt="${pokemon.name}">
-            <div class="card-body">
-              <img class="pokeball" loading="lazy" src="./img/svgs/pokeball.svg" alt="pokeball">
-              <h5 class="card-title text-capitalize">
-                <strong>${pokemon.name}</strong>
-              </h5>
-            </div>
-          </div>
-        </div>
-      `;
-      PokemonContainer.insertAdjacentHTML('beforeend',template);
-    });
-
-  }
-
-  LoadDom();
+  return {all};
 
 } )();
